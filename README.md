@@ -21,6 +21,8 @@ In addition, figure 26 guides which alternate function **(AF)** must be selected
 
 ![afrh](https://github.com/yasinsulhan/USART-REGISTER/assets/109728194/6976f3a6-4f55-4e72-9853-713389ef2ad7)
 
+![afrh2](https://github.com/yasinsulhan/USART-REGISTER/assets/109728194/e070e34a-713b-45f0-aced-5e11f71ea871)
+
 Also, the other Tx and Rx pins are given below.
 
 ![Tx and Rx pins](https://github.com/yasinsulhan/USART-REGISTER/assets/109728194/0fd7b5c3-99b5-4fb0-b0b8-f0aff3177b3c)
@@ -33,7 +35,8 @@ According to STM32F4 board block diagram, PORT B goes to **AHB1** peripheral clo
 
 ![apb1enr](https://github.com/yasinsulhan/USART-REGISTER/assets/109728194/f583dec2-2a5e-4f82-926d-c0fb9eed8072)
 
-
+#### USART Configuration
+Lastly, USART configuration is adjusted in registers. 
 
 
 
