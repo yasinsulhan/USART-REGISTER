@@ -1,3 +1,4 @@
+# USART with REGISTER
 A USART (universal synchronous/asynchronous receiver/transmitter) is hardware that enables a device to communicate using serial protocols.
 
 A UART device can use asynchronous communication protocols. A USART device can use both asynchronous and synchronous communication protocols. Therefore, a USART can do anything a UART can do and more. Because a USART requires more complex circuitry and more communication lines to fully implement, many devices may only implement a UART to save on cost, complexity or power usage.
@@ -36,11 +37,38 @@ According to STM32F4 board block diagram, PORT B goes to **AHB1** peripheral clo
 ![apb1enr](https://github.com/yasinsulhan/USART-REGISTER/assets/109728194/f583dec2-2a5e-4f82-926d-c0fb9eed8072)
 
 #### USART Configuration
-Lastly, USART configuration is adjusted in registers. 
+Lastly, USART configuration is adjusted in USART control register acccording to receiver and transmitter following procedures.
 
+![CR1](https://github.com/yasinsulhan/USART-REGISTER/assets/109728194/cddcd6f8-9c66-4750-8446-398c5911bb58)
 
+##### Transmitter
+•Enable the USART by writing the UE bit in USART_CR1 register to 1. `USART3->CR1 |= 1 << 13`
 
+•Program the M bit in USART_CR1 to define the word length. `USART3->CR1 |= 1 << 12`
 
+•Select the desired baud rate using the USART_BRR register. `USART3->BRR = 0x1112` Desired baud rate is 9600. [The link shows that how to calculate baud rate.](https://fastbitlab.com/stm32-usart-lecture-9-usart-baud-rate-calculation-part-2/)
 
+•Set the TE bit in USART_CR1 to send an idle frame as first transmission. `USART3->CR1 |= 1 << 3`
 
+##### Receiver
+•Enable the USART by writing the UE bit in USART_CR1 register to 1.
 
+•Program the M bit in USART_CR1 to define the word length.
+
+•Select the desired baud rate using the baud rate register USART_BRR. 
+
+•Set the RE bit USART_CR1. This enables the receiver which begins searching for a start bit. `USART3->CR1 |= 1 << 2`
+
+#### Steps for Sending Characters
+•***Write the data to send in the USART_DR register (this clears the TXE bit).*** Repeat this for each data to be transmitted in case of single buffer.
+
+•After writing the last data into the USART_DR register, ***wait until TC=1. This indicates that the transmission of the last frame is complete.*** This is required for instance when the USART is disabled or enters the Halt mode to avoid corrupting the last transmission.
+
+`USART3->DR = data`
+
+`while(!(USART3->SR & (1 << 6)))`
+
+#### Steps for Receiving Characters
+•The RXNE bit is set. ***It indicates that the content of the shift register is transferred to the RDR***. In other words, data has been received and can be read.
+
+•In single buffer mode, ***clearing the RXNE bit is performed by a software read to the USART_DR register. The RXNE flag can also be cleared by writing a zero to it***. The RXNE bit must be cleared before the end of the reception of the next character to avoid an overrun error.
