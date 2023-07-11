@@ -4,17 +4,19 @@
 
 void RCC_Config()
 {
-	RCC->CR |= 0x00010000;	// HSEON enable
+	RCC->CR |= 0x00010000;		// HEON
 	while(!(RCC->CR & 0x00020000));	// HSEON Ready Flag wait
-	RCC->CR |= 0x00080000;	// CSS Enable
-	RCC->PLLCFGR |= 0x01000000;	// PLL on
-	RCC->PLLCFGR |= 0x00000004;	// PLL M = 4
-	RCC->PLLCFGR |= 0x00005A00;	// Pll N = 168
-	RCC->PLLCFGR |= 0x00000000;	// PLL p = 2
-	RCC->CFGR |= 0x00000000;	// AHB Prescaler = 1
-	RCC->CFGR |= 0x00080000;	// APB2 Prescaler = 2
-	RCC->CFGR |= 0x00001400;	// APB1 Prescaler = 4
-	RCC->CIR |= 0x00800000;		// CSS Flag clear
+	RCC->CR |= 0x00080000;			// CSS Enable
+	RCC->CR |= 0x01000000;			// PLL On
+	RCC->PLLCFGR |= 0x00400000;		// PLL HSE Selected
+	RCC->PLLCFGR |= 0x00000004;		// PLL M = 4
+	RCC->PLLCFGR |= 0x00005A00;		// PLL N = 168
+	RCC->PLLCFGR |= 0x00000000;		// PLL P = 2
+	RCC->CFGR |= 0x00000000;		// AHB Prescaler 1
+	RCC->CFGR |= 0x00080000;		// APB2 Prescaler 2
+	RCC->CFGR |= 0x00001400;		// AHB1 Prescaler 4
+	RCC->CIR |= 0x00080000;			// HSERDY Flag Clear
+	RCC->CIR |= 0x00800000;			// CSS Flag Clear
 }
 
 void GPIO_Congig()
@@ -26,20 +28,22 @@ void GPIO_Congig()
 
 void USART_Config()
 {
-	RCC->APB1ENR |= (1 << 18);		// USART3 CLOCK Enable
-	USART3->BRR = 0x1112;			// Baud Rate 9600
-	USART3->CR1 |= 1 << 2;			// Rx Enable
-	USART3->CR1 |= 1 << 3;			// Tx Enable
-	USART3->CR1 |= 1 << 5;			// RXNE interrupt enable
-	USART3->CR1 |= 1 << 10;			// No parity
-	USART3->CR1 |= 1 << 12;			// Word length 8 bit
-	USART3->CR2 |= 1 << 12;			// Stop bit 1
-	USART3->CR1 |= 1 << 13;			// Usart enable
+	RCC->APB1ENR |= 1 << 18;
+
+	USART3->BRR = 0x1112;		// BaudRate 9600
+	USART3->CR1 |= 1 << 2;		// Rx enable
+	USART3->CR1 |= 1 << 3;		// Tx enable
+	USART3->CR1 |= 1 << 5;		// Rx interrupt enable
+	USART3->CR1 |= 0 << 10;		// Parity control disable
+	USART3->CR1 |= 0 << 12;		// Word length 8bit
+	USART3->CR2 |= 0 << 12;		// Stop bit 1
+	USART3->BRR = 0x1112;		// BaudRate 9600
+	USART3->CR1 |= 1 << 13;		// Usart enable
 }
 
 void Send_Char(uint8_t data)
 {
-	//----- Steps for Sending Char -----//
+	//----- Steps for Sending Characters -----//
 
 	/*
 		1.Write the data to send in the USART_DR register (this clears the TXE bit). Repeat this
@@ -67,7 +71,7 @@ void Send_Str(char *Str)
 uint8_t Get_Char(void)
 {
 
-	//----- Steps for Sending Char -----//
+	//----- Steps for Receiving Chararacters -----//
 
 		/*
 			1.The RXNE bit is set. It ***indicates*** that the content of the shift register is transferred to the
