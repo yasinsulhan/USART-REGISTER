@@ -1,7 +1,7 @@
 # USART with REGISTER
 A USART (universal synchronous/asynchronous receiver/transmitter) is hardware that enables a device to communicate using serial protocols.
 
-A UART device can use asynchronous communication protocols. A USART device can use both asynchronous and synchronous communication protocols. Therefore, a USART can do anything a UART can do and more. Because a USART requires more complex circuitry and more communication lines to fully implement, many devices may only implement a UART to save on cost, complexity or power usage.
+A UART device can use asynchronous communication protocols. A USART device can use both asynchronous and synchronous communication protocols. Therefore, a USART can do anything a UART can do and more. Because a USART requires more complex circuitry and more communication lines to fully implement, many devices may only implement a UART to save on cost, complexity or power usage. The detailed information can be accessed from here [[1]](https://www.techtarget.com/whatis/definition/USART-Universal-Synchronous-Asynchronous-Receiver-Transmitter)
 
 #### What is UART ?
 In asynchronous mode, only one data line is used to send data from the transmitter to the receiver. There is no shared synchronization signal from the sender to the receiver. So, the receiver has no way to know how fast or slow the data is coming. To circumvent this, both the sender and receiver must be manually configured beforehand to use the same data rate.
@@ -24,7 +24,7 @@ In addition, figure 26 guides which alternate function **(AF)** must be selected
 
 ![afrh2](https://github.com/yasinsulhan/USART-REGISTER/assets/109728194/e070e34a-713b-45f0-aced-5e11f71ea871)
 
-Also, the other Tx and Rx pins are given below.
+Also, the other Tx and Rx pins are given in [[2]](http://embeddedsystemengineering.blogspot.com/2015/04/stm32f4-discovery-tutorial-5-usart.html) below.
 
 ![Tx and Rx pins](https://github.com/yasinsulhan/USART-REGISTER/assets/109728194/0fd7b5c3-99b5-4fb0-b0b8-f0aff3177b3c)
 
@@ -46,7 +46,7 @@ Lastly, USART configuration is adjusted in USART control register acccording to 
 
 •Program the M bit in USART_CR1 to define the word length. `USART3->CR1 |= 1 << 12`
 
-•Select the desired baud rate using the USART_BRR register. `USART3->BRR = 0x1112` Desired baud rate is 9600. [The link shows that how to calculate baud rate.](https://fastbitlab.com/stm32-usart-lecture-9-usart-baud-rate-calculation-part-2/)
+•Select the desired baud rate using the USART_BRR register. `USART3->BRR = 0x1112` Desired baud rate is 9600. The calculation of baud rate is shown in [[3]](https://fastbitlab.com/stm32-usart-lecture-9-usart-baud-rate-calculation-part-2/)
 
 •Set the TE bit in USART_CR1 to send an idle frame as first transmission. `USART3->CR1 |= 1 << 3`
 
@@ -72,3 +72,11 @@ Lastly, USART configuration is adjusted in USART control register acccording to 
 •The RXNE bit is set. ***It indicates that the content of the shift register is transferred to the RDR***. In other words, data has been received and can be read.
 
 •In single buffer mode, ***clearing the RXNE bit is performed by a software read to the USART_DR register. The RXNE flag can also be cleared by writing a zero to it***. The RXNE bit must be cleared before the end of the reception of the next character to avoid an overrun error.
+
+#### References
+[[1]](https://www.techtarget.com/whatis/definition/USART-Universal-Synchronous-Asynchronous-Receiver-Transmitter) - Whatls
+
+[[2]](http://embeddedsystemengineering.blogspot.com/2015/04/stm32f4-discovery-tutorial-5-usart.html) - embeddedsystemengineering
+
+[[3]](https://fastbitlab.com/stm32-usart-lecture-9-usart-baud-rate-calculation-part-2/) - fastbitlab
+
